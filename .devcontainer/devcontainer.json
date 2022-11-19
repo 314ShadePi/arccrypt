@@ -1,0 +1,14 @@
+{
+  "name": "arccrypt",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+  "privileged": true,
+  "features": {
+    "ghcr.io/devcontainers/features/rust:1": {
+      "profile": "default"
+    },
+    "ghcr.io/eitsupi/devcontainer-features/mdbook:0": {},
+    "ghcr.io/devcontainers/features/docker-in-docker:1": {
+        "version": "latest"
+    }
+  }
+}
