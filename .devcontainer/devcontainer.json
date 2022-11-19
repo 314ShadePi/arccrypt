@@ -1,6 +1,6 @@
 {
   "name": "arccrypt",
-  "image": "hub.docker.com/_/ubuntu",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
   "privileged": true,
   "features": {
     "ghcr.io/devcontainers/features/rust:1": {
