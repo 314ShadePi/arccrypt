@@ -1,11 +1,17 @@
-use arccrypt::models::block::Block;
-use sha256::digest;
+use arccrypt::models::{block::Block, blocks::Blocks};
 
 fn main() {
-    let block = Block::new(digest("input"), "Hello World".to_string());
-    println!("{:#?}", block);
-    let mut block = block;
+    let mut block = Block::new("0".to_string(), "Genesis Block".to_string());
     block.mine_block(5);
-    let block = block;
-    println!("{:#?}", block);
+    let mut blocks = Blocks(vec![block]);
+    let mut block = Block::new(blocks[blocks.len() - 1].hash.clone(), "LOOOL".to_string());
+    block.mine_block(5);
+    blocks.push(block);
+    let mut block = Block::new(blocks[blocks.len() - 1].hash.clone(), "LOOOL".to_string());
+    block.mine_block(5);
+    blocks.push(block);
+    let mut block = Block::new(blocks[blocks.len() - 1].hash.clone(), "LOOOL".to_string());
+    block.mine_block(5);
+    blocks.push(block);
+    println!("{}", blocks);
 }

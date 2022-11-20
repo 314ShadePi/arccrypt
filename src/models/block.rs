@@ -43,3 +43,13 @@ impl Block {
         println!("Block mined to {}", self.hash);
     }
 }
+
+impl std::fmt::Display for Block {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(
+            f,
+            "{}",
+            serde_json::to_string_pretty::<Block>(&self).unwrap()
+        )
+    }
+}
