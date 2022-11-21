@@ -6,6 +6,9 @@
 		"devcontainers",
 		"eitsupi",
 		"hasher",
-		"mdbook"
+		"keypair",
+		"mdbook",
+		"rngs",
+		"secp"
 	]
 }
