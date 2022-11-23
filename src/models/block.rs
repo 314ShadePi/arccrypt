@@ -1,3 +1,4 @@
+use super::transactions::Transactions;
 use chrono::prelude::*;
 use serde::{Deserialize, Serialize};
 use sha256::digest;
@@ -7,17 +8,17 @@ pub struct Block {
     pub hash: String,
     pub previous_hash: String,
     pub timestamp: DateTime<Utc>,
-    pub data: String,
+    pub transactions: Transactions,
     pub nonce: i128,
 }
 
 impl Block {
-    pub fn new(previous_hash: String, data: String) -> Self {
+    pub fn new(previous_hash: String, data: Transactions) -> Self {
         let mut intermediate = Self {
             hash: "".to_string(),
             previous_hash: previous_hash,
             timestamp: Utc::now(),
-            data: data,
+            transactions: data,
             nonce: 0,
         };
 
@@ -28,7 +29,7 @@ impl Block {
     pub fn calculate_hash(&self) -> String {
         digest(format!(
             "{}{}{}{}",
-            self.previous_hash, self.timestamp, self.data, self.nonce
+            self.previous_hash, self.timestamp, self.transactions, self.nonce
         ))
     }
 
@@ -41,6 +42,18 @@ impl Block {
         }
 
         println!("Block mined to {}", self.hash);
+    }
+
+    pub fn is_valid(&self) -> bool {
+        for tx in self.transactions.clone().0 {
+            if !tx.is_valid() {
+                return false;
+            } else {
+                continue;
+            }
+        }
+
+        return true;
     }
 }
 

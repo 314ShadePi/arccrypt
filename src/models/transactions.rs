@@ -1,10 +1,10 @@
-use super::block::Block;
+use super::transaction::Transaction;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct Blocks(pub Vec<Block>);
+pub struct Transactions(pub Vec<Transaction>);
 
-impl std::fmt::Display for Blocks {
+impl std::fmt::Display for Transactions {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         self.iter().fold(Ok(()), |result, block| {
             result.and_then(|_| writeln!(f, "{}", block))
@@ -12,15 +12,15 @@ impl std::fmt::Display for Blocks {
     }
 }
 
-impl std::ops::Deref for Blocks {
-    type Target = Vec<Block>;
+impl std::ops::Deref for Transactions {
+    type Target = Vec<Transaction>;
 
     fn deref(&self) -> &Self::Target {
         &self.0
     }
 }
 
-impl std::ops::DerefMut for Blocks {
+impl std::ops::DerefMut for Transactions {
     fn deref_mut(&mut self) -> &mut Self::Target {
         &mut self.0
     }
