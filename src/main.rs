@@ -31,14 +31,10 @@ fn main() {
     coin.add_transaction(tx1);
     coin.mine_pending_transactions(key_pair.public_key());
 
-    for i in 0..10 {
-        for j in 0..10 {
-            let mut tx1 = Transaction::new(Some(key_pair.public_key()), &key_pair2.public_key(), arccrypt::models::tx_payload::TXPayload::I64(i*j));
-            tx1.sign_transaction(key_pair);
-            coin.add_transaction(tx1);
-        }
-        coin.mine_pending_transactions(key_pair.public_key());
-    }
+    let mut tx2 = Transaction::new(Some(key_pair.public_key()), &key_pair2.public_key(), arccrypt::models::tx_payload::TXPayload::I64(30));
+    tx2.sign_transaction(key_pair);
+    coin.add_transaction(tx2);
+    coin.mine_pending_transactions(key_pair.public_key());
 
     println!(
         "Balance of 1: {}",
@@ -48,6 +44,6 @@ fn main() {
         "Balance of 2: {}",
         coin.get_balance_of_address(key_pair2.public_key())
     );
-    println!("Is chain valid: {}", coin.is_valid());
+    coin.is_valid();
     println!("{}", serde_json::to_string_pretty::<Blockchain>(&coin).unwrap());
 }

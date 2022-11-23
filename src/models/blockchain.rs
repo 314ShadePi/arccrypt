@@ -93,6 +93,7 @@ impl Blockchain {
 
     pub fn is_valid(&self) -> bool {
         let mut i = 1;
+        println!("Validating chain...");
         while i < self.chain.len() {
             let current_block = self.chain[i].clone();
             let previous_block = self.chain[i - 1].clone();
