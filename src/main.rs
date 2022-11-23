@@ -1,8 +1,6 @@
 use arccrypt::models::{
-    block::Block, blockchain::Blockchain, blocks::Blocks, transaction::Transaction,
-    transactions::Transactions,
+    blockchain::Blockchain, transaction::Transaction,
 };
-use secp256k1::rand::rngs::OsRng;
 use secp256k1::{KeyPair, Secp256k1, SecretKey};
 
 fn main() {
