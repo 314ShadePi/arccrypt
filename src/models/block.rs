@@ -16,7 +16,7 @@ impl Block {
     pub fn new(previous_hash: String, data: Transactions) -> Self {
         let mut intermediate = Self {
             hash: "".to_string(),
-            previous_hash: previous_hash,
+            previous_hash,
             timestamp: Utc::now(),
             transactions: data,
             nonce: 0,
@@ -53,7 +53,7 @@ impl Block {
             }
         }
 
-        return true;
+        true
     }
 }
 
@@ -62,7 +62,7 @@ impl std::fmt::Display for Block {
         write!(
             f,
             "{}",
-            serde_json::to_string_pretty::<Block>(&self).unwrap()
+            serde_json::to_string_pretty::<Block>(self).unwrap()
         )
     }
 }

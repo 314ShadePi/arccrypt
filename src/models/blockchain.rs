@@ -14,7 +14,7 @@ pub struct Blockchain {
 impl Blockchain {
     pub fn new() -> Self {
         Self {
-            difficulty: 5,
+            difficulty: 2,
             chain: Blocks(vec![Self::create_genesis_block()]),
             pending_transactions: Transactions(vec![]),
             mining_reward: 100,
@@ -54,7 +54,7 @@ impl Blockchain {
     }
 
     pub fn add_transaction(&mut self, tx: Transaction) {
-        if tx.from_address.is_none() || tx.to_address.to_string().len() == 0 {
+        if tx.from_address.is_none() || tx.to_address.to_string().is_empty() {
             return;
         }
 
@@ -69,8 +69,10 @@ impl Blockchain {
         let mut balance: i64 = 0;
         for block in self.chain.clone().0 {
             for tx in block.transactions.clone().0 {
-                if tx.from_address.unwrap() == address {
-                    balance -= tx.amount;
+                if let Some(fa) = tx.from_address {
+                    if fa == address {
+                        balance -= tx.amount;
+                    }
                 }
 
                 if tx.to_address == address {
@@ -102,6 +104,12 @@ impl Blockchain {
             i = 1 + 1;
         }
 
-        return true;
+        true
+    }
+}
+
+impl Default for Blockchain {
+    fn default() -> Self {
+        Self::new()
     }
 }

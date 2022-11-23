@@ -13,9 +13,9 @@ pub struct Transaction {
 impl Transaction {
     pub fn new(from_address: Option<PublicKey>, to_address: &PublicKey, amount: i64) -> Self {
         Self {
-            from_address: from_address.clone(),
-            to_address: to_address.clone(),
-            amount: amount,
+            from_address,
+            to_address: *to_address,
+            amount,
             signature: None,
         }
     }
@@ -32,34 +32,31 @@ impl Transaction {
     pub fn sign_transaction(&mut self, signing_key: KeyPair) -> bool {
         let secp = Secp256k1::new();
         if signing_key.public_key() != self.from_address.unwrap() {
-            return false;
+            false
         } else {
             let message = Message::from_hashed_data::<bitcoin_hashes::sha256::Hash>(
                 self.calculate_hash().as_bytes(),
             );
             let signature = secp.sign_ecdsa(&message, &signing_key.secret_key());
             self.signature = Some(signature);
-            return true;
+            true
         }
     }
 
     pub fn is_valid(&self) -> bool {
         let secp = Secp256k1::new();
         if self.from_address.is_none() {
-            return true;
-        } else if self.signature.is_none() || self.signature.unwrap().to_string().len() == 0 {
-            return false;
+            true
+        } else if self.signature.is_none() || self.signature.unwrap().to_string().is_empty() {
+            false
         } else {
-            match secp.verify_ecdsa(
+            secp.verify_ecdsa(
                 &Message::from_hashed_data::<bitcoin_hashes::sha256::Hash>(
                     self.calculate_hash().as_bytes(),
                 ),
                 &self.signature.unwrap(),
                 &self.from_address.unwrap(),
-            ) {
-                Ok(_) => true,
-                Err(_) => false,
-            }
+            ).is_ok()
         }
     }
 }
@@ -69,7 +66,7 @@ impl std::fmt::Display for Transaction {
         write!(
             f,
             "{}",
-            serde_json::to_string_pretty::<Transaction>(&self).unwrap()
+            serde_json::to_string_pretty::<Transaction>(self).unwrap()
         )
     }
 }
