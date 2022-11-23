@@ -20,10 +20,22 @@ fn main() {
     .expect("32 bytes, within curve order");
     let key_pair2 = KeyPair::from_secret_key(&secp, &secret_key2);
     let mut coin = Blockchain::new();
-    let mut tx1 = Transaction::new(Some(key_pair.public_key()), &key_pair2.public_key(), 10);
+    let mut tx1 = Transaction::new(Some(key_pair.public_key()), &key_pair2.public_key(), arccrypt::models::tx_payload::TXPayload::I64(10));
+    tx1.sign_transaction(key_pair);
+    coin.add_transaction(tx1);
+    let mut tx1 = Transaction::new(Some(key_pair.public_key()), &key_pair2.public_key(), arccrypt::models::tx_payload::TXPayload::I64(20));
+    tx1.sign_transaction(key_pair);
+    coin.add_transaction(tx1);
+    let mut tx1 = Transaction::new(Some(key_pair.public_key()), &key_pair2.public_key(), arccrypt::models::tx_payload::TXPayload::I64(30));
     tx1.sign_transaction(key_pair);
     coin.add_transaction(tx1);
     coin.mine_pending_transactions(key_pair.public_key());
+
+    let mut tx2 = Transaction::new(Some(key_pair.public_key()), &key_pair2.public_key(), arccrypt::models::tx_payload::TXPayload::I64(30));
+    tx2.sign_transaction(key_pair);
+    coin.add_transaction(tx2);
+    coin.mine_pending_transactions(key_pair.public_key());
+
     println!(
         "Balance of 1: {}",
         coin.get_balance_of_address(key_pair.public_key())
@@ -32,7 +44,6 @@ fn main() {
         "Balance of 2: {}",
         coin.get_balance_of_address(key_pair2.public_key())
     );
-    println!("Is chain valid: {}", coin.is_valid());
-    coin.chain[1].transactions[0].amount = 1;
-    println!("Is chain valid: {}", coin.is_valid());
+    coin.is_valid();
+    println!("{}", serde_json::to_string_pretty::<Blockchain>(&coin).unwrap());
 }

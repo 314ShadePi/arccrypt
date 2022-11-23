@@ -45,6 +45,7 @@ impl Block {
     }
 
     pub fn is_valid(&self) -> bool {
+        println!("Validating block...");
         for tx in self.transactions.clone().0 {
             if !tx.is_valid() {
                 return false;
