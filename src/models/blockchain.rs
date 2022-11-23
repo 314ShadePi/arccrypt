@@ -71,12 +71,12 @@ impl Blockchain {
             for tx in block.transactions.clone().0 {
                 if let Some(fa) = tx.from_address {
                     if fa == address {
-                        balance -= tx.amount;
+                        balance -= tx.payload;
                     }
                 }
 
                 if tx.to_address == address {
-                    balance += tx.amount;
+                    balance += tx.payload;
                 }
             }
         }

@@ -6,7 +6,7 @@ use sha256::digest;
 pub struct Transaction {
     pub from_address: Option<PublicKey>,
     pub to_address: PublicKey,
-    pub amount: i64,
+    pub payload: i64,
     signature: Option<Signature>,
 }
 
@@ -15,7 +15,7 @@ impl Transaction {
         Self {
             from_address,
             to_address: *to_address,
-            amount,
+            payload: amount,
             signature: None,
         }
     }
@@ -24,7 +24,7 @@ impl Transaction {
         digest(format!(
             "{}{}{}",
             self.to_address,
-            self.amount,
+            self.payload,
             self.from_address.unwrap()
         ))
     }

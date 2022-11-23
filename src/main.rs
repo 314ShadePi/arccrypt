@@ -33,6 +33,6 @@ fn main() {
         coin.get_balance_of_address(key_pair2.public_key())
     );
     println!("Is chain valid: {}", coin.is_valid());
-    coin.chain[1].transactions[0].amount = 1;
+    coin.chain[1].transactions[0].payload = 1;
     println!("Is chain valid: {}", coin.is_valid());
 }
