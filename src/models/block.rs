@@ -13,6 +13,7 @@ pub struct Block {
 }
 
 impl Block {
+    /// Creates a new block with the given previous_hash and data.
     pub fn new(previous_hash: String, data: Transactions) -> Self {
         let mut intermediate = Self {
             hash: "".to_string(),
@@ -26,6 +27,7 @@ impl Block {
         intermediate
     }
 
+    /// Calculates the hash of the block.
     pub fn calculate_hash(&self) -> String {
         digest(format!(
             "{}{}{}{}",
@@ -33,6 +35,7 @@ impl Block {
         ))
     }
 
+    /// Mines the block by changing the nonce value.
     pub fn mine_block(&mut self, difficulty: usize) {
         println!("Mining block {} with difficulty {}", self.hash, difficulty);
 
@@ -44,7 +47,9 @@ impl Block {
         println!("Block mined to {}", self.hash);
     }
 
+    /// Checks if the block has valid transactions
     pub fn is_valid(&self) -> bool {
+        #[cfg(debug_assertions)]
         println!("Validating block...");
         for tx in self.transactions.clone().0 {
             if !tx.is_valid() {
@@ -59,22 +64,27 @@ impl Block {
 }
 
 impl Block {
+    /// Returns the block hash.
     pub fn hash(&self) -> String {
         self.hash.clone()
     }
 
+    /// Returns the previous blocks hash.
     pub fn previous_hash(&self) -> String {
         self.previous_hash.clone()
     }
 
+    /// Returns the timestamp of the creation of the block.
     pub fn timestamp(&self) -> DateTime<Utc> {
         self.timestamp
     }
 
+    /// Returns the nonce of the block.
     pub fn nonce(&self) -> i128 {
         self.nonce
     }
 
+    /// Returns the transactions of the block.
     pub fn transactions(&self) -> Transactions {
         self.transactions.clone()
     }

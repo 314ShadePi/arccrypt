@@ -45,6 +45,7 @@ impl Transaction {
     }
 
     pub fn is_valid(&self) -> bool {
+        #[cfg(debug_assertions)]
         println!("Validating tx...");
         let secp = Secp256k1::new();
         if self.from_address.is_none() {

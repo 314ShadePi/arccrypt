@@ -45,6 +45,10 @@ impl Blockchain {
     }
 
     pub fn mine_pending_transactions(&mut self, mining_reward_address: PublicKey) {
+        if !self.is_valid() {
+            return;
+        }
+
         let reward_tx = Transaction::new(
             None,
             &mining_reward_address,
@@ -61,6 +65,10 @@ impl Blockchain {
     }
 
     pub fn add_transaction(&mut self, tx: Transaction) {
+        if !self.is_valid() {
+            return;
+        }
+
         if tx.from_address().is_none() || tx.to_address().to_string().is_empty() {
             return;
         }
@@ -72,7 +80,11 @@ impl Blockchain {
         self.pending_transactions.push(tx);
     }
 
-    pub fn get_balance_of_address(&self, address: PublicKey) -> i64 {
+    pub fn get_balance_of_address(&self, address: PublicKey) -> Result<i64, String> {
+        if !self.is_valid() {
+            return Err("Blockchain invalid".to_string());
+        }
+
         let mut balance: i64 = 0;
         for block in self.chain.clone().0 {
             for tx in block.transactions().clone().0 {
@@ -92,11 +104,12 @@ impl Blockchain {
                 }
             }
         }
-        balance
+        Ok(balance)
     }
 
     pub fn is_valid(&self) -> bool {
         let mut i = 1;
+        #[cfg(debug_assertions)]
         println!("Validating chain...");
         while i < self.chain.len() {
             let current_block = self.chain[i].clone();
@@ -111,6 +124,15 @@ impl Blockchain {
             }
 
             if current_block.previous_hash() != previous_block.hash() {
+                return false;
+            }
+
+            i += 1;
+        }
+
+        let mut i = 0;
+        while i < self.pending_transactions.len() {
+            if !self.pending_transactions[i].is_valid() {
                 return false;
             }
 
