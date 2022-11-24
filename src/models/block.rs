@@ -5,11 +5,11 @@ use sha256::digest;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Block {
-    pub hash: String,
-    pub previous_hash: String,
-    pub timestamp: DateTime<Utc>,
-    pub transactions: Transactions,
-    pub nonce: i128,
+    hash: String,
+    previous_hash: String,
+    timestamp: DateTime<Utc>,
+    nonce: i128,
+    transactions: Transactions,
 }
 
 impl Block {
@@ -55,6 +55,28 @@ impl Block {
         }
 
         true
+    }
+}
+
+impl Block {
+    pub fn hash(&self) -> String {
+        self.hash.clone()
+    }
+
+    pub fn previous_hash(&self) -> String {
+        self.previous_hash.clone()
+    }
+
+    pub fn timestamp(&self) -> DateTime<Utc> {
+        self.timestamp
+    }
+
+    pub fn nonce(&self) -> i128 {
+        self.nonce
+    }
+
+    pub fn transactions(&self) -> Transactions {
+        self.transactions.clone()
     }
 }
 

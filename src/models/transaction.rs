@@ -1,14 +1,14 @@
+use super::tx_payload::TXPayload;
 use secp256k1::{ecdsa::Signature, KeyPair, Message, PublicKey, Secp256k1};
 use serde::{Deserialize, Serialize};
 use sha256::digest;
-use super::tx_payload::TXPayload;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Transaction {
-    pub from_address: Option<PublicKey>,
-    pub to_address: PublicKey,
-    pub payload: TXPayload,
+    from_address: Option<PublicKey>,
+    to_address: PublicKey,
     signature: Option<Signature>,
+    payload: TXPayload,
 }
 
 impl Transaction {
@@ -58,8 +58,23 @@ impl Transaction {
                 ),
                 &self.signature.unwrap(),
                 &self.from_address.unwrap(),
-            ).is_ok()
+            )
+            .is_ok()
         }
+    }
+}
+
+impl Transaction {
+    pub fn from_address(&self) -> Option<PublicKey> {
+        self.from_address
+    }
+
+    pub fn to_address(&self) -> PublicKey {
+        self.to_address
+    }
+
+    pub fn payload(&self) -> TXPayload {
+        self.payload.clone()
     }
 }
 
