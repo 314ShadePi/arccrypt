@@ -28,6 +28,11 @@ jobs:
         with:
           name: book
           path: docs/book/
+      - run: cargo doc
+      - uses: actions/upload-artifact@v1
+        with:
+          name: c_doc
+          path: targets/doc/
 
   # Deploy job
   deploy:
@@ -50,6 +55,10 @@ jobs:
       - uses: actions/download-artifact@master
         with:
           name: book
+          path: .
+      - uses: actions/download-artifact@master
+        with:
+          name: c_doc
           path: .
       - uses: actions/configure-pages@v1
       - uses: actions/upload-pages-artifact@v1
