@@ -32,7 +32,7 @@ jobs:
       - uses: actions/upload-artifact@v1
         with:
           name: c_doc
-          path: targets/doc/
+          path: target/doc/
 
   # Deploy job
   deploy:
