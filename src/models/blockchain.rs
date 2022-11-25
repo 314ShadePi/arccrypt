@@ -28,13 +28,15 @@ impl Blockchain {
         let key_pair1 = KeyPair::from_secret_key(&secp, &secret_key);
         let (secret_key, _) = secp.generate_keypair(&mut OsRng);
         let key_pair2 = KeyPair::from_secret_key(&secp, &secret_key);
-        let mut intermediate = Block::new(
-            "0".to_string(),
-            Transactions(vec![Transaction::new(
+        let mut tx = Transaction::new(
                 &key_pair1.public_key(),
                 &key_pair2.public_key(),
                 TXPayload::I64(10),
-            )]),
+        );
+        tx.sign_transaction(key_pair1);
+        let mut intermediate = Block::new(
+            "0".to_string(),
+            Transactions(vec![tx]),
         );
         intermediate.mine_block(2);
         intermediate
@@ -112,23 +114,25 @@ impl Blockchain {
     }
 
     pub fn is_valid(&self) -> bool {
-        let mut i = 1;
+        let mut i = 0;
         #[cfg(debug_assertions)]
         println!("Validating chain...");
         while i < self.chain.len() {
             let current_block = self.chain[i].clone();
-            let previous_block = self.chain[i - 1].clone();
 
             if !current_block.is_valid() {
                 return false;
             }
+            if i > 0 {
+                let previous_block = self.chain[i - 1].clone();
 
-            if current_block.hash() != current_block.calculate_hash() {
-                return false;
-            }
+                if current_block.hash() != current_block.calculate_hash() {
+                    return false;
+                }
 
-            if current_block.previous_hash() != previous_block.hash() {
-                return false;
+                if current_block.previous_hash() != previous_block.hash() {
+                    return false;
+                }
             }
 
             i += 1;
