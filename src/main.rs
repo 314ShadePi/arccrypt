@@ -1,4 +1,4 @@
-use arccrypt::models::{blockchain::Blockchain, transaction::Transaction};
+use arccrypt::models::{blockchain::Blockchain, transaction::Transaction, tx_payload::TXPayload};
 use secp256k1::{KeyPair, Secp256k1, SecretKey};
 
 fn main() {
@@ -21,21 +21,21 @@ fn main() {
     let mut tx1 = Transaction::new(
         &key_pair.public_key(),
         &key_pair2.public_key(),
-        arccrypt::models::tx_payload::TXPayload::I64(10),
+        TXPayload::I64(10),
     );
     tx1.sign_transaction(key_pair);
     coin.add_transaction(tx1);
     let mut tx1 = Transaction::new(
         &key_pair.public_key(),
         &key_pair2.public_key(),
-        arccrypt::models::tx_payload::TXPayload::I64(20),
+        TXPayload::I64(20),
     );
     tx1.sign_transaction(key_pair);
     coin.add_transaction(tx1);
     let mut tx1 = Transaction::new(
         &key_pair.public_key(),
         &key_pair2.public_key(),
-        arccrypt::models::tx_payload::TXPayload::I64(30),
+        TXPayload::I64(30),
     );
     tx1.sign_transaction(key_pair);
     coin.add_transaction(tx1);
@@ -46,7 +46,7 @@ fn main() {
             let mut tx1 = Transaction::new(
                 &key_pair.public_key(),
                 &key_pair2.public_key(),
-                arccrypt::models::tx_payload::TXPayload::I64(10),
+                TXPayload::I64(10),
             );
             tx1.sign_transaction(key_pair);
             coin.add_transaction(tx1);

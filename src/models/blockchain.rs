@@ -107,6 +107,8 @@ impl Blockchain {
                             balance += pl;
                         }
                     }
+                    TXPayload::CharacterSheet(_) => todo!(),
+                    TXPayload::CharacterSheetUpdate(_) => todo!(),
                 }
             }
         }

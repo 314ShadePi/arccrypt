@@ -1,3 +1,4 @@
+pub mod dnd;
 pub mod tx_payload;
 pub mod transactions;
 pub mod transaction;
