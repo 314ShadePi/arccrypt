@@ -19,21 +19,21 @@ fn main() {
     let key_pair2 = KeyPair::from_secret_key(&secp, &secret_key2);
     let mut coin = Blockchain::new(2, 100);
     let mut tx1 = Transaction::new(
-        Some(key_pair.public_key()),
+        &key_pair.public_key(),
         &key_pair2.public_key(),
         arccrypt::models::tx_payload::TXPayload::I64(10),
     );
     tx1.sign_transaction(key_pair);
     coin.add_transaction(tx1);
     let mut tx1 = Transaction::new(
-        Some(key_pair.public_key()),
+        &key_pair.public_key(),
         &key_pair2.public_key(),
         arccrypt::models::tx_payload::TXPayload::I64(20),
     );
     tx1.sign_transaction(key_pair);
     coin.add_transaction(tx1);
     let mut tx1 = Transaction::new(
-        Some(key_pair.public_key()),
+        &key_pair.public_key(),
         &key_pair2.public_key(),
         arccrypt::models::tx_payload::TXPayload::I64(30),
     );
@@ -44,7 +44,7 @@ fn main() {
     for _ in 0..10 {
         for _ in 0..10 {
             let mut tx1 = Transaction::new(
-                Some(key_pair.public_key()),
+                &key_pair.public_key(),
                 &key_pair2.public_key(),
                 arccrypt::models::tx_payload::TXPayload::I64(10),
             );

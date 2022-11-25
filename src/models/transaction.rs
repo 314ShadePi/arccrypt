@@ -5,16 +5,16 @@ use sha256::digest;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Transaction {
-    from_address: Option<PublicKey>,
+    from_address: PublicKey,
     to_address: PublicKey,
     signature: Option<Signature>,
     payload: TXPayload,
 }
 
 impl Transaction {
-    pub fn new(from_address: Option<PublicKey>, to_address: &PublicKey, amount: TXPayload) -> Self {
+    pub fn new(from_address: &PublicKey, to_address: &PublicKey, amount: TXPayload) -> Self {
         Self {
-            from_address,
+            from_address: *from_address,
             to_address: *to_address,
             payload: amount,
             signature: None,
@@ -26,13 +26,13 @@ impl Transaction {
             "{}{:#?}{}",
             self.to_address,
             self.payload,
-            self.from_address.unwrap()
+            self.from_address
         ))
     }
 
     pub fn sign_transaction(&mut self, signing_key: KeyPair) -> bool {
         let secp = Secp256k1::new();
-        if signing_key.public_key() != self.from_address.unwrap() {
+        if signing_key.public_key() != self.from_address {
             false
         } else {
             let message = Message::from_hashed_data::<bitcoin_hashes::sha256::Hash>(
@@ -48,9 +48,7 @@ impl Transaction {
         #[cfg(debug_assertions)]
         println!("Validating tx...");
         let secp = Secp256k1::new();
-        if self.from_address.is_none() {
-            true
-        } else if self.signature.is_none() || self.signature.unwrap().to_string().is_empty() {
+        if self.signature.is_none() || self.signature.unwrap().to_string().is_empty() {
             false
         } else {
             secp.verify_ecdsa(
@@ -58,7 +56,7 @@ impl Transaction {
                     self.calculate_hash().as_bytes(),
                 ),
                 &self.signature.unwrap(),
-                &self.from_address.unwrap(),
+                &self.from_address,
             )
             .is_ok()
         }
@@ -66,7 +64,7 @@ impl Transaction {
 }
 
 impl Transaction {
-    pub fn from_address(&self) -> Option<PublicKey> {
+    pub fn from_address(&self) -> PublicKey {
         self.from_address
     }
 

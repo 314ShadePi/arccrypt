@@ -31,7 +31,7 @@ impl Blockchain {
         let mut intermediate = Block::new(
             "0".to_string(),
             Transactions(vec![Transaction::new(
-                Some(key_pair1.public_key()),
+                &key_pair1.public_key(),
                 &key_pair2.public_key(),
                 TXPayload::I64(10),
             )]),
@@ -49,11 +49,17 @@ impl Blockchain {
             return;
         }
 
-        let reward_tx = Transaction::new(
-            None,
+        let secp = Secp256k1::new();
+        let (secret_key, _) = secp.generate_keypair(&mut OsRng);
+        let key_pair = KeyPair::from_secret_key(&secp, &secret_key);
+
+        let mut reward_tx = Transaction::new(
+            &key_pair.public_key(),
             &mining_reward_address,
             TXPayload::I64(self.mining_reward),
         );
+        reward_tx.sign_transaction(key_pair);
+
         self.pending_transactions.push(reward_tx);
         let mut block = Block::new(
             self.get_latest_block().hash(),
@@ -69,7 +75,7 @@ impl Blockchain {
             return;
         }
 
-        if tx.from_address().is_none() || tx.to_address().to_string().is_empty() {
+        if tx.from_address().to_string().is_empty() || tx.to_address().to_string().is_empty() {
             return;
         }
 
@@ -91,10 +97,8 @@ impl Blockchain {
                 match tx.payload() {
                     TXPayload::String(_) => todo!(),
                     TXPayload::I64(pl) => {
-                        if let Some(fa) = tx.from_address() {
-                            if fa == address {
-                                balance -= pl;
-                            }
+                        if tx.from_address() == address {
+                            balance -= pl;
                         }
 
                         if tx.to_address() == address {
