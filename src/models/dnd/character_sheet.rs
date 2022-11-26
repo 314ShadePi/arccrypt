@@ -1,4 +1,4 @@
-use super::personality::Personality;
+use super::{personality::Personality, skills::Skills};
 use chrono::prelude::*;
 use secp256k1::PublicKey;
 use serde::{Deserialize, Serialize};
@@ -11,7 +11,8 @@ pub struct CharacterSheet {
     timestamp: DateTime<Utc>,
     name: String,
     player_name: String,
-    class_lvl: String,
+    class: String,
+    level: i64,
     background: String,
     race: String,
     alignment: String,
@@ -23,6 +24,7 @@ pub struct CharacterSheet {
     wis: i64,
     cha: i64,
     personality: Personality,
+    skills: Skills,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -34,25 +36,45 @@ pub struct CharacterSheetUpdate {
 }
 
 impl CharacterSheet {
-    pub fn new(owner: &PublicKey, name: String) -> Self {
+    pub fn new(
+        owner: &PublicKey,
+        name: String,
+        player_name: String,
+        class: String,
+        level: i64,
+        background: String,
+        race: String,
+        alignment: String,
+        exp: i128,
+        str: i64,
+        dex: i64,
+        con: i64,
+        int: i64,
+        wis: i64,
+        cha: i64,
+        personality: Personality,
+        skills: Skills,
+    ) -> Self {
         Self {
             id: Uuid::new_v4(),
             owner: *owner,
             timestamp: Utc::now(),
             name,
-            player_name: todo!(),
-            class_lvl: todo!(),
-            background: todo!(),
-            race: todo!(),
-            alignment: todo!(),
-            exp: todo!(),
-            str: todo!(),
-            dex: todo!(),
-            con: todo!(),
-            int: todo!(),
-            wis: todo!(),
-            cha: todo!(),
-            personality: todo!(),
+            player_name,
+            class,
+            level,
+            background,
+            race,
+            alignment,
+            exp,
+            str,
+            dex,
+            con,
+            int,
+            wis,
+            cha,
+            personality,
+            skills,
         }
     }
 }
