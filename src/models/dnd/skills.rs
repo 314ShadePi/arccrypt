@@ -1,5 +1,7 @@
 use serde::{Deserialize, Serialize};
 
+use super::skill::Skill;
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Skills {
     acrobatics: Skill,
@@ -20,11 +22,4 @@ pub struct Skills {
     sleight_of_hands: Skill,
     stealth: Skill,
     survival: Skill,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct Skill {
-    active: bool,
-    amount: i32,
-    depends_on: String,
 }

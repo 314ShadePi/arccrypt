@@ -1,4 +1,10 @@
+pub mod hit_points;
+pub mod hit_dice;
+pub mod death_saves;
+pub mod skill;
+pub mod combat;
+pub mod attribute;
+pub mod attributes;
 pub mod skills;
-pub mod spell;
 pub mod personality;
 pub mod character_sheet;

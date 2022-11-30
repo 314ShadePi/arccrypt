@@ -2,8 +2,8 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Personality {
-    traits: String,
-    ideals: String,
-    bonds: String,
-    flaws: String,
+    traits: Vec<String>,
+    ideals: Vec<String>,
+    bonds: Vec<String>,
+    flaws: Vec<String>,
 }

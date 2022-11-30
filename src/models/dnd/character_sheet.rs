@@ -1,4 +1,4 @@
-use super::{personality::Personality, skills::Skills};
+use super::{personality::Personality, skills::Skills, attributes::Attributes};
 use chrono::prelude::*;
 use secp256k1::PublicKey;
 use serde::{Deserialize, Serialize};
@@ -16,15 +16,9 @@ pub struct CharacterSheet {
     background: String,
     race: String,
     alignment: String,
-    exp: i128,
-    str: i64,
-    dex: i64,
-    con: i64,
-    int: i64,
-    wis: i64,
-    cha: i64,
     personality: Personality,
     skills: Skills,
+    attributes: Attributes
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -45,15 +39,9 @@ impl CharacterSheet {
         background: String,
         race: String,
         alignment: String,
-        exp: i128,
-        str: i64,
-        dex: i64,
-        con: i64,
-        int: i64,
-        wis: i64,
-        cha: i64,
         personality: Personality,
         skills: Skills,
+        attributes: Attributes,
     ) -> Self {
         Self {
             id: Uuid::new_v4(),
@@ -66,15 +54,9 @@ impl CharacterSheet {
             background,
             race,
             alignment,
-            exp,
-            str,
-            dex,
-            con,
-            int,
-            wis,
-            cha,
             personality,
             skills,
+            attributes,
         }
     }
 }

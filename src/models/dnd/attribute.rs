@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct Spell {
-    prepared: bool,
-    name: String,
+pub struct Attribute {
+    value: u8,
+    modifier: u8,
 }
