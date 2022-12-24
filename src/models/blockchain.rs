@@ -29,15 +29,12 @@ impl Blockchain {
         let (secret_key, _) = secp.generate_keypair(&mut OsRng);
         let key_pair2 = KeyPair::from_secret_key(&secp, &secret_key);
         let mut tx = Transaction::new(
-                &key_pair1.public_key(),
-                &key_pair2.public_key(),
-                TXPayload::I64(10),
+            &key_pair1.public_key(),
+            &key_pair2.public_key(),
+            TXPayload::I64(10),
         );
         tx.sign_transaction(key_pair1);
-        let mut intermediate = Block::new(
-            "0".to_string(),
-            Transactions(vec![tx]),
-        );
+        let mut intermediate = Block::new("0".to_string(), Transactions(vec![tx]));
         intermediate.mine_block(2);
         intermediate
     }
@@ -107,7 +104,8 @@ impl Blockchain {
                             balance += pl;
                         }
                     }
-                    TXPayload::CharacterSheet(_) => todo!(),
+                    TXPayload::CharacterSheet(_) => (),
+                    TXPayload::Custom(_) => (),
                 }
             }
         }

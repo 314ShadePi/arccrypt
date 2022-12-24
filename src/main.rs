@@ -1,5 +1,9 @@
-use arccrypt::models::{blockchain::Blockchain, transaction::Transaction, tx_payload::TXPayload};
+use arccrypt::{
+    models::{blockchain::Blockchain, transaction::Transaction, tx_payload::TXPayload},
+    prelude::Payload,
+};
 use secp256k1::{KeyPair, Secp256k1, SecretKey};
+use serde::{Deserialize, Serialize};
 
 fn main() {
     let secp = Secp256k1::new();
@@ -54,6 +58,19 @@ fn main() {
         coin.mine_pending_transactions(key_pair.public_key());
     }
 
+    let mut tx1 = Transaction::new(
+        &key_pair.public_key(),
+        &key_pair2.public_key(),
+        TXPayload::Custom(Box::new(CData {
+            id: 1,
+            name: "Erik".to_string(),
+            age: 16,
+        })),
+    );
+    tx1.sign_transaction(key_pair);
+    coin.add_transaction(tx1);
+    coin.mine_pending_transactions(key_pair.public_key());
+
     println!(
         "Balance of 1: {}",
         coin.get_balance_of_address(key_pair.public_key()).unwrap()
@@ -69,3 +86,13 @@ fn main() {
         serde_json::to_string_pretty::<Blockchain>(&coin).unwrap()
     );
 }
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+struct CData {
+    id: u8,
+    name: String,
+    age: u8,
+}
+
+#[typetag::serde]
+impl Payload for CData {}

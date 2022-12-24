@@ -2,6 +2,7 @@
 	"cSpell.words": [
 		"arccrypt",
 		"chrono",
+		"clonable",
 		"devcontainer",
 		"devcontainers",
 		"drmingdrmer",
@@ -9,7 +10,10 @@
 		"hasher",
 		"keypair",
 		"mdbook",
+		"mopa",
+		"mopafy",
 		"rngs",
-		"secp"
+		"secp",
+		"typetag"
 	]
 }
