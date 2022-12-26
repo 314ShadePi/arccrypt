@@ -12,10 +12,22 @@ dependencies = [
 ]
 
 [[package]]
-name = "arccrypt_cli"
+name = "arccrypt"
 version = "0.1.0"
 dependencies = [
  "arccrypt_core",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "arccrypt_cli"
+version = "0.1.0"
+dependencies = [
+ "arccrypt",
+ "secp256k1",
+ "serde",
+ "serde_json",
 ]
 
 [[package]]
