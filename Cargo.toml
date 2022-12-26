@@ -1,5 +1,5 @@
 [workspace]
-members = ["crates/arccrypt_core", "crates/dev_helpers"]
+members = ["crates/arccrypt_core", "crates/arccrypt_macros", "crates/dev_helpers"]
 
 [workspace.package]
 version = "0.1.0"
