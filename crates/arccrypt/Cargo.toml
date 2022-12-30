@@ -1,0 +1,12 @@
+[package]
+name = "arccrypt"
+version.workspace = true
+authors.workspace = true
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+arccrypt_core = { path = "../arccrypt_core" }
+serde = { version = "1.0.151", features = ["derive"] }
+serde_json = "1.0.91"

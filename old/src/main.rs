@@ -1,5 +1,9 @@
-use arccrypt::prelude::*;
+use arccrypt::{
+    models::{blockchain::Blockchain, transaction::Transaction, tx_payload::TXPayload},
+    prelude::Payload,
+};
 use secp256k1::{KeyPair, Secp256k1, SecretKey};
+use serde::{Deserialize, Serialize};
 
 fn main() {
     let secp = Secp256k1::new();
@@ -18,42 +22,55 @@ fn main() {
     .expect("32 bytes, within curve order");
     let key_pair2 = KeyPair::from_secret_key(&secp, &secret_key2);
     let mut coin = Blockchain::new(2, 100);
-    let tx1 = Transaction::builder()
-        .from(&key_pair.public_key())
-        .to(&key_pair2.public_key())
-        .payload(TXPayload::I64(10))
-        .build(key_pair)
-        .unwrap();
+    let mut tx1 = Transaction::new(
+        &key_pair.public_key(),
+        &key_pair2.public_key(),
+        TXPayload::I64(10),
+    );
+    tx1.sign_transaction(key_pair);
     coin.add_transaction(tx1);
-    let tx1 = Transaction::builder()
-        .from(&key_pair.public_key())
-        .to(&key_pair2.public_key())
-        .payload(TXPayload::I64(10))
-        .build(key_pair)
-        .unwrap();
+    let mut tx1 = Transaction::new(
+        &key_pair.public_key(),
+        &key_pair2.public_key(),
+        TXPayload::I64(20),
+    );
+    tx1.sign_transaction(key_pair);
     coin.add_transaction(tx1);
-    let tx1 = Transaction::builder()
-        .from(&key_pair.public_key())
-        .to(&key_pair2.public_key())
-        .payload(TXPayload::I64(10))
-        .build(key_pair)
-        .unwrap();
+    let mut tx1 = Transaction::new(
+        &key_pair.public_key(),
+        &key_pair2.public_key(),
+        TXPayload::I64(30),
+    );
+    tx1.sign_transaction(key_pair);
     coin.add_transaction(tx1);
     coin.mine_pending_transactions(key_pair.public_key());
 
     for _ in 0..10 {
         for _ in 0..10 {
-            let tx1 = Transaction::builder()
-                .from(&key_pair.public_key())
-                .to(&key_pair2.public_key())
-                .payload(TXPayload::I64(10))
-                .build(key_pair)
-                .unwrap();
+            let mut tx1 = Transaction::new(
+                &key_pair.public_key(),
+                &key_pair2.public_key(),
+                TXPayload::I64(10),
+            );
+            tx1.sign_transaction(key_pair);
             coin.add_transaction(tx1);
         }
         coin.mine_pending_transactions(key_pair.public_key());
     }
-    println!("===");
+
+    let mut tx1 = Transaction::new(
+        &key_pair.public_key(),
+        &key_pair2.public_key(),
+        TXPayload::Custom(Box::new(CData {
+            id: 1,
+            name: "Erik".to_string(),
+            age: 16,
+        })),
+    );
+    tx1.sign_transaction(key_pair);
+    coin.add_transaction(tx1);
+    coin.mine_pending_transactions(key_pair.public_key());
+
     println!(
         "Balance of 1: {}",
         coin.get_balance_of_address(key_pair.public_key()).unwrap()
@@ -69,3 +86,13 @@ fn main() {
         serde_json::to_string_pretty::<Blockchain>(&coin).unwrap()
     );
 }
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+struct CData {
+    id: u8,
+    name: String,
+    age: u8,
+}
+
+#[typetag::serde]
+impl Payload for CData {}
